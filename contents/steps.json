@@ -1,0 +1,26 @@
+[
+  {
+    "id": "step-01",
+    "order": 1,
+    "title": "About tendons and knots",
+    "image": "assets/images/step-01.jpg",
+    "alt": "tendons and knots illustration",
+    "body": "<p>本步骤讲解弹性线（tendon）与基本绑结方式。材料：Teflon 管、纤维线。</p>",
+    "materials": ["Teflon tubing", "Fiber tendon"],
+    "tools": ["scissors", "tweezers"],
+    "time": "5min",
+    "tips": "绑结时保持适当张力"
+  },
+  {
+    "id": "step-02",
+    "order": 2,
+    "title": "Fingertip Tendon Routing",
+    "image": "assets/images/step-02.jpg",
+    "alt": "fingertip tendon routing diagram",
+    "body": "<p>将肌腱从指尖路由到卡盘，注意不要交叉。</p>",
+    "materials": ["tendon lines"],
+    "tools": ["tweezers"],
+    "time": "8min",
+    "tips": "使用细针引导更顺手"
+  }
+]
