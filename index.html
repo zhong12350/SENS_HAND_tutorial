@@ -1,32 +1,583 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>机器人灵巧手拼接教程</title>
-  <link rel="stylesheet" href="style.css"/>
-  <meta name="description" content="逐步图文教程 — 31 步完成机器人灵巧手拼接" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORCA 机器人灵巧手拼接教程</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .steps-nav {
+            padding: 0 20px;
+        }
+
+        .steps-section {
+            margin-bottom: 25px;
+        }
+
+        .steps-section h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--light-color);
+        }
+
+        .step-item {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .step-item.active {
+            background-color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        /* 主内容区样式 */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+            background-color: white;
+            min-height: 100vh;
+        }
+
+        .step-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .step-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .step-header .step-number {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+
+        .step-content {
+            margin-bottom: 40px;
+        }
+
+        .image-container {
+            margin-bottom: 25px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .step-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .step-image:hover {
+            transform: scale(1.02);
+        }
+
+        .step-description {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            line-height: 1.7;
+        }
+
+        .step-description h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .step-description p {
+            margin-bottom: 15px;
+        }
+
+        .step-description ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .step-description li {
+            margin-bottom: 8px;
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 导航按钮样式 */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-button {
+            padding: 12px 25px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-button:hover {
+            background-color: #2980b9;
+        }
+
+        .nav-button.prev::before {
+            content: "←";
+            margin-right: 8px;
+        }
+
+        .nav-button.next::after {
+            content: "→";
+            margin-left: 8px;
+        }
+
+        .nav-button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            .step-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-  <a class="skip-link" href="#content">跳到内容</a>
-  <header class="site-header">
     <div class="container">
-      <h1>机器人灵巧手拼接教程</h1>
+        <!-- 侧边栏导航 -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>ORCA 灵巧手</h1>
+                <p>机器人手部拼接教程</p>
+            </div>
+            <div class="steps-nav">
+                <div class="steps-section">
+                    <h3>第一部分：肌腱与绳结</h3>
+                    <div class="step-item active" data-step="0">00: 关于肌腱和绳结</div>
+                    <div class="step-item" data-step="1">01: 指尖肌腱布线</div>
+                    <div class="step-item" data-step="2">02: PP 肌腱布线</div>
+                </div>
+                
+                <div class="steps-section">
+                    <h3>第二部分：手指组装</h3>
+                    <div class="step-item" data-step="3">03: 外展布线</div>
+                    <div class="step-item" data-step="4">04: 拇指外展肌腱布线</div>
+                    <div class="step-item" data-step="5">05: 手指组装</div>
+                    <div class="step-item" data-step="6">06: 关于肌腱和绳结</div>
+                    <div class="step-item" data-step="7">07: 拇指组装</div>
+                </div>
+                
+                <div class="steps-section">
+                    <h3>第三部分：腕部与主体</h3>
+                    <div class="step-item" data-step="8">08: 皮肤到腕骨</div>
+                    <div class="step-item" data-step="9">09: 腕骨中的特氟龙管</div>
+                    <div class="step-item" data-step="10">10: 食指到腕骨组装</div>
+                    <div class="step-item" data-step="11">11: 拇指到腕骨组装</div>
+                    <div class="step-item" data-step="12">12: 腕骨齿轮和杆</div>
+                    <div class="step-item" data-step="13">13: 顶部塔中的特氟龙管</div>
+                    <div class="step-item" data-step="14">14: 腕部伺服器组装</div>
+                    <div class="step-item" data-step="15">15: 顶部塔腕带张紧螺丝</div>
+                    <div class="step-item" data-step="16">16: 腕部伺服器放置</div>
+                    <div class="step-item" data-step="17">17: 腕骨到顶部塔</div>
+                    <div class="step-item" data-step="18">18: 腕骨轴承盖</div>
+                    <div class="step-item" data-step="19">19: 张紧腕带</div>
+                </div>
+                
+                <div class="steps-section">
+                    <h3>第四部分：电子与最终组装</h3>
+                    <div class="step-item" data-step="20">20: 设置Dupomixels</div>
+                    <div class="step-item" data-step="21">21: 线轴组装和连接到伺服器</div>
+                    <div class="step-item" data-step="22">22: 将PCB连接到塔</div>
+                    <div class="step-item" data-step="23">23: 将伺服器连接到塔</div>
+                    <div class="step-item" data-step="24">24: 杆止动器到塔</div>
+                    <div class="step-item" data-step="25">25: 腕骨和顶部塔到底部塔</div>
+                    <div class="step-item" data-step="26">26: 肌腱缠绕</div>
+                    <div class="step-item" data-step="27">27: 塔和外壳上的磁铁</div>
+                    <div class="step-item" data-step="28">28: 外壳上的ORCA字母</div>
+                    <div class="step-item" data-step="29">29: 完整组装</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <div class="step-header">
+                <span class="step-number">步骤 00</span>
+                <h2>关于肌腱和绳结</h2>
+            </div>
+
+            <div class="step-content">
+                <div class="image-container">
+                    <img src="assets/images/step00.jpg" alt="步骤00示意图" class="step-image">
+                </div>
+
+                <div class="step-description">
+                    <h3>Ashley Stopper 绳结</h3>
+                    <p>在整个组装过程中广泛使用 Ashley Stopper 绳结。可以使用任何来源的 Ashley Stopper 绳结系法说明。</p>
+                    
+                    <h3>绳结紧固要点</h3>
+                    <ul>
+                        <li>始终通过从两侧拉动来牢固地收紧绳结</li>
+                        <li>使用钳子施加额外的张力</li>
+                        <li>松散的绳结可能会在重复使用后松开</li>
+                    </ul>
+                    
+                    <h3>补充说明</h3>
+                    <p>您可以观看组装视频以了解组装过程的大致情况。</p>
+                    <p><strong>重要提示：</strong>视频中显示的组装手是稍旧版本。请始终参考本指南获取最新说明。视频作为补充材料提供，帮助您熟悉组装步骤，但不应用作主要参考。</p>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button class="nav-button prev" disabled>上一步</button>
+                <button class="nav-button next">下一步</button>
+            </div>
+        </div>
     </div>
-  </header>
 
-  <main id="content" class="container main-grid" role="main">
-    <aside id="sidebar" class="sidebar" aria-label="步骤列表">
-      <h2>Overview</h2>
-      <ul id="step-list"></ul>
-    </aside>
+    <!-- 图片模态框 -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img src="" alt="放大图片" class="modal-image" id="modalImage">
+        </div>
+    </div>
 
-    <section id="step-article" class="content" tabindex="-1" aria-live="polite">
-      <!-- JS 会在这里插入每一步的内容 -->
-    </section>
-  </main>
+    <script>
+        // 当前步骤索引
+        let currentStep = 0;
+        const totalSteps = 29; // 总步骤数
 
-  <footer>© 2025 你的团队名</footer>
-  <script src="assets/js/app.js"></script>
+        // 步骤数据 - 在实际应用中，这些数据可能来自JSON文件或数据库
+        const stepData = [
+            {
+                number: "00",
+                title: "关于肌腱和绳结",
+                image: "assets/images/step00.jpg",
+                description: `
+                    <h3>Ashley Stopper 绳结</h3>
+                    <p>在整个组装过程中广泛使用 Ashley Stopper 绳结。可以使用任何来源的 Ashley Stopper 绳结系法说明。</p>
+                    
+                    <h3>绳结紧固要点</h3>
+                    <ul>
+                        <li>始终通过从两侧拉动来牢固地收紧绳结</li>
+                        <li>使用钳子施加额外的张力</li>
+                        <li>松散的绳结可能会在重复使用后松开</li>
+                    </ul>
+                    
+                    <h3>补充说明</h3>
+                    <p>您可以观看组装视频以了解组装过程的大致情况。</p>
+                    <p><strong>重要提示：</strong>视频中显示的组装手是稍旧版本。请始终参考本指南获取最新说明。视频作为补充材料提供，帮助您熟悉组装步骤，但不应用作主要参考。</p>
+                `
+            },
+            // 其他步骤数据将在这里添加
+            // 在实际项目中，您可能需要为每个步骤创建类似的对象
+        ];
+
+        // DOM 元素
+        const stepItems = document.querySelectorAll('.step-item');
+        const stepNumber = document.querySelector('.step-number');
+        const stepTitle = document.querySelector('.step-header h2');
+        const stepImage = document.querySelector('.step-image');
+        const stepDescription = document.querySelector('.step-description');
+        const prevButton = document.querySelector('.nav-button.prev');
+        const nextButton = document.querySelector('.nav-button.next');
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const closeModal = document.querySelector('.close-modal');
+
+        // 初始化
+        function init() {
+            // 添加步骤点击事件
+            stepItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const stepIndex = parseInt(item.getAttribute('data-step'));
+                    goToStep(stepIndex);
+                });
+            });
+
+            // 添加导航按钮事件
+            prevButton.addEventListener('click', goToPrevStep);
+            nextButton.addEventListener('click', goToNextStep);
+
+            // 添加图片点击事件
+            stepImage.addEventListener('click', () => {
+                modalImage.src = stepImage.src;
+                modal.style.display = 'flex';
+            });
+
+            // 关闭模态框
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // 点击模态框背景关闭
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // 初始化第一步
+            updateStepDisplay();
+        }
+
+        // 转到指定步骤
+        function goToStep(stepIndex) {
+            if (stepIndex >= 0 && stepIndex <= totalSteps) {
+                currentStep = stepIndex;
+                updateStepDisplay();
+            }
+        }
+
+        // 转到上一步
+        function goToPrevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateStepDisplay();
+            }
+        }
+
+        // 转到下一步
+        function goToNextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateStepDisplay();
+            }
+        }
+
+        // 更新步骤显示
+        function updateStepDisplay() {
+            // 更新步骤导航高亮
+            stepItems.forEach(item => {
+                const stepIndex = parseInt(item.getAttribute('data-step'));
+                if (stepIndex === currentStep) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // 更新步骤内容
+            // 在实际应用中，这里应该从stepData数组或通过AJAX获取数据
+            stepNumber.textContent = `步骤 ${String(currentStep).padStart(2, '0')}`;
+            
+            // 这里应该根据currentStep从数据源获取对应的标题、图片和描述
+            // 暂时使用示例数据
+            stepTitle.textContent = getStepTitle(currentStep);
+            stepImage.src = `assets/images/step${String(currentStep).padStart(2, '0')}.jpg`;
+            stepImage.alt = `步骤${String(currentStep).padStart(2, '0')}示意图`;
+            stepDescription.innerHTML = getStepDescription(currentStep);
+
+            // 更新导航按钮状态
+            prevButton.disabled = currentStep === 0;
+            nextButton.disabled = currentStep === totalSteps;
+        }
+
+        // 获取步骤标题 - 在实际应用中，这些数据应该来自数据库或JSON文件
+        function getStepTitle(step) {
+            const titles = [
+                "关于肌腱和绳结",
+                "指尖肌腱布线",
+                "PP 肌腱布线",
+                "外展布线",
+                "拇指外展肌腱布线",
+                "手指组装",
+                "关于肌腱和绳结",
+                "拇指组装",
+                "皮肤到腕骨",
+                "腕骨中的特氟龙管",
+                "食指到腕骨组装",
+                "拇指到腕骨组装",
+                "腕骨齿轮和杆",
+                "顶部塔中的特氟龙管",
+                "腕部伺服器组装",
+                "顶部塔腕带张紧螺丝",
+                "腕部伺服器放置",
+                "腕骨到顶部塔",
+                "腕骨轴承盖",
+                "张紧腕带",
+                "设置Dupomixels",
+                "线轴组装和连接到伺服器",
+                "将PCB连接到塔",
+                "将伺服器连接到塔",
+                "杆止动器到塔",
+                "腕骨和顶部塔到底部塔",
+                "肌腱缠绕",
+                "塔和外壳上的磁铁",
+                "外壳上的ORCA字母",
+                "完整组装"
+            ];
+            return titles[step] || "步骤标题";
+        }
+
+        // 获取步骤描述 - 在实际应用中，这些数据应该来自数据库或JSON文件
+        function getStepDescription(step) {
+            // 这里只是示例，实际应用中应该有每个步骤的详细描述
+            return `
+                <h3>步骤 ${String(step).padStart(2, '0')} 详细说明</h3>
+                <p>这是步骤 ${String(step).padStart(2, '0')} 的详细说明内容。在实际应用中，这里应该包含该步骤的完整说明、注意事项和技巧。</p>
+                <p>您可以参考图片了解具体操作方式。</p>
+                <ul>
+                    <li>操作要点一</li>
+                    <li>操作要点二</li>
+                    <li>注意事项</li>
+                </ul>
+            `;
+        }
+
+        // 初始化网站
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
